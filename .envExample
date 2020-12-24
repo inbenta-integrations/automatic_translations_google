@@ -1,0 +1,14 @@
+AUTH_URL = 
+KM_HEADER_KEY = 
+KM_UPST = 
+
+KM_LANG_LIST = ES,EN
+
+KM_API_KEY_ES = 
+KM_SECRET_ES = 
+
+KM_API_KEY_EN = 
+KM_SECRET_EN = 
+
+GOOGLE_KEY = 
+GOOGLE_URL = #Example: https://translation.googleapis.com/language/translate/v2
