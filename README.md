@@ -117,7 +117,7 @@ The “Header Name” must be “Apply-Translation”
     * Auth URL for the KM API, given by Inbenta.
     * Header key value (previous step).
     * A "User Personal Secret Token" (```KM_UPST```). [Help Center Instructions](https://help.inbenta.com/en/general/administration/managing-credentials-for-developers/managing-your-ups-tokens/).
-    * Api Key and Secret for every instance (origin and target instances).
+    * Api Key and Secret (from **Knowledge Editor API**) of every instance (origin and target instances).
     * Google information (key and url).
 * Set all values in the **.env** file:
 ```env

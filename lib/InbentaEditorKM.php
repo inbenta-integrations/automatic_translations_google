@@ -68,8 +68,8 @@ class InbentaEditorKM extends Translate
 
                 $this->userTypesSource = [];
 
-                foreach ($content->userTypes as $key => $userType) {
-                    if ($key == 0) {
+                foreach ($content->userTypes as $userType) {
+                    if ($userType->id == 0) {
                         foreach ($userType->attributes as $data) {
                             if ($data->name == "ANSWER_TEXT") {
                                 $this->mainText = $data->objects[0]->value;
@@ -257,7 +257,7 @@ class InbentaEditorKM extends Translate
                     $userTypesInInstance[] = $ut->id;
                     $this->relatedContentsTargetOriginal[$ut->id] = $ut->relatedContents;
                 }
-                //Only catch the user types that exists in both instances (original and target)
+                //Only catch the user types that exist in both instances (original and target)
                 foreach ($this->userTypesSource as $ut) {
                     if (in_array($ut->id, $userTypesInInstance)) {
                         $this->userTypesTarget[] = $ut;
@@ -411,7 +411,8 @@ class InbentaEditorKM extends Translate
             $languagesList = strpos($languages, ",") !== false ? explode(",", $languages) : [$languages];
 
             if (isset($languagesList[0])) {
-
+                $error_no_match = [];
+                $error_api_key = [];
                 foreach ($languagesList as $newLang) {
 
                     if (strtolower($this->currentLanguage) != strtolower($newLang)) {
@@ -429,13 +430,25 @@ class InbentaEditorKM extends Translate
                                 $this->saveRelatedContent($apiKey, $accessToken);
                                 $translation = $this->sendToTranslate(strtolower($newLang));
                                 $response = $this->saveContent($apiKey, $accessToken, $translation);
+                            } else {
+                                //No content id or users matched
+                                $error_no_match[] = $newLang;
                             }
                         } else {
-                            //Error
+                            //Lang api key or secret with error
+                            $error_api_key[] = $newLang;
                         }
                     }
                 }
-                return ["message" => "Done"];
+                if (count($error_api_key) === 0 && count($error_no_match) === 0) {
+                    return ["message" => "Done"];
+                } else {
+                    return [
+                        "message" => "Errors in ApiKey (check env file for configuration) or no matching content or users",
+                        "error_api_key" => $error_api_key,
+                        "error_no_match" => $error_no_match,
+                    ];
+                }
             }
         }
         http_response_code(500);
